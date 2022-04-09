@@ -163,7 +163,6 @@ joblib
 jq
 jsonschema
 kaitaistruct
-kali-tweaks
 keyring
 KismetCaptureBtGeiger
 KismetCaptureFreaklabsZigbee

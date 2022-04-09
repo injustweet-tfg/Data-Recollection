@@ -120,7 +120,6 @@ geoip2
 geojson
 gitdb
 GitPython
-gpg
 graphene
 graphene-sqlalchemy
 graphql-core

@@ -48,7 +48,6 @@ Bottleneck
 Brotli
 cairocffi
 catalogue
-catfish
 cbor
 censys
 certifi

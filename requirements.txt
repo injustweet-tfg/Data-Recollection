@@ -45,7 +45,6 @@ bluepy
 boltons
 bottle
 Bottleneck
-Brlapi
 Brotli
 cairocffi
 catalogue

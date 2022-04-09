@@ -86,8 +86,6 @@ dropbox
 ecdsa
 email-validator
 emoji
-en-core-web-sm
-es-core-news-sm
 et-xmlfile
 ExifRead
 faraday-agent-parameters-types

@@ -164,7 +164,6 @@ jq
 jsonschema
 kaitaistruct
 keyring
-KismetCaptureBtGeiger
 KismetCaptureFreaklabsZigbee
 KismetCaptureRtl433
 KismetCaptureRtladsb

@@ -89,7 +89,6 @@ emoji
 et-xmlfile
 ExifRead
 faraday-agent-parameters-types
-faraday-client
 faraday-plugins
 faradaysec
 fastapi

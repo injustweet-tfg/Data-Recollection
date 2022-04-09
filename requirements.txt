@@ -71,7 +71,6 @@ cymem
 Cython
 dataclasses-json
 dbus-python
-debtags
 decorator
 defusedxml
 deprecation

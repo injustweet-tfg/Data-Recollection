@@ -168,7 +168,6 @@ kiwisolver
 langcodes
 ldap3
 ldapdomaindump
-lightdm-gtk-greeter-settings
 limiter
 limits
 llvmlite

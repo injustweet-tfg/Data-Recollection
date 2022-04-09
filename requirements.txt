@@ -164,10 +164,6 @@ jq
 jsonschema
 kaitaistruct
 keyring
-KismetCaptureFreaklabsZigbee
-KismetCaptureRtl433
-KismetCaptureRtladsb
-KismetCaptureRtlamr
 kiwisolver
 langcodes
 ldap3

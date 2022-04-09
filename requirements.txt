@@ -215,7 +215,6 @@ numpy
 oauthlib
 odfpy
 olefile
-onboard
 openpyxl
 orjson
 packaging

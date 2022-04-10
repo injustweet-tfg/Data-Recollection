@@ -2,6 +2,8 @@ import re
 import tweepy
 import emoji
 import os
+import js2py
+
 import time
 
 #from bson import ObjectId
@@ -166,11 +168,14 @@ def main():
     try:
         while (1):
             for post in collection.find():
-                # Enviar a la api
                 if(index > 20):
                     f.write("]")
-                    #f.seek(0, os.SEEK_SET)
-                    #f.truncate()
+
+                    #eval_res, tempfile = js2py.run_file("api.js")
+                    #tempfile.wish("GeeksforGeeks")
+
+                    f.seek(0, os.SEEK_SET)
+                    f.truncate()
                     f.write("[")
 
                 if (text_analysis(post, nlp, nlp_s, freq_dict, f)):
@@ -188,8 +193,8 @@ def main():
 
         #Enviar a la api
 
-        #f.seek(0,os.SEEK_SET)
-        #f.truncate()
+        f.seek(0,os.SEEK_SET)
+        f.truncate()
 
         f.close()
 

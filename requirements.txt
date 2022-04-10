@@ -162,6 +162,7 @@ Jinja2
 joblib
 jq
 jsonschema
+js2py
 kaitaistruct
 keyring
 kiwisolver

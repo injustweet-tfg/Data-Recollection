@@ -60,6 +60,7 @@ cherrypy-cors
 cli-helpers
 click
 click-plugins
+codecs
 colorama
 commonmark
 configobj

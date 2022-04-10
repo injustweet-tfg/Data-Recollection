@@ -3,7 +3,7 @@ import tweepy
 import emoji
 import os
 import js2py
-
+import codecs
 import time
 
 #from bson import ObjectId
@@ -151,7 +151,7 @@ def main():
                                                   query["WORD"][18],query["WORD"][19],query["WORD"][20],query["WORD"][21],query["WORD"][22],query["WORD"][23],
                                                   query["WORD"][24]])
 
-    f = open("../../json/examples.json", 'a+')
+    f = codecs.open("../../json/examples_scrape.json", 'a+', encoding='utf-8', errors='ignore')
     one_char = f.read(1)
 
     if not one_char:

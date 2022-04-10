@@ -4,6 +4,7 @@ import tweepy
 import emoji
 import os
 import time
+import codecs
 
 
 #from bson import ObjectId
@@ -103,7 +104,9 @@ def main():
     db = client['tweet_stream']
     collection = db['test_scrape']
 
-    f = open("../../json/examples_scrape.json", 'a+')
+    f = codecs.open("../../json/examples_scrape.json", 'a+', encoding='utf-8', errors='ignore')
+
+    #f = open("../../json/examples_scrape.json", 'a+')
 
     one_char = f.read(1)
 
@@ -116,13 +119,14 @@ def main():
 
     # Using TwitterSearchScraper to scrape data and append tweets to list
     try:
+        index = 0
         for i, tweet in enumerate(sntwitter.TwitterSearchScraper(query["WORD"][0] + " OR " + query["WORD"][0] + " OR " + query["WORD"][0] + " OR " + query["WORD"][3] + " OR " + query["WORD"][4] + " OR " +
          query["WORD"][5] + " OR " + query["WORD"][6] + " OR " + query["WORD"][7] + " OR " + query["WORD"][8] + " OR " + query["WORD"][9] + " OR " +\
          query["WORD"][10] + " OR " + query["WORD"][11] + " OR " + query["WORD"][12] + " OR " + query["WORD"][13] + " OR " + query["WORD"][14] + " OR " +\
          query["WORD"][15] + " OR " + query["WORD"][16] + " OR " + query["WORD"][17] + " OR " + query["WORD"][18] + " OR " + query["WORD"][19] + " OR " +
          query["WORD"][20] + " OR " + query["WORD"][21] + " OR " + query["WORD"][22] + " OR " + query["WORD"][23] + " OR " + query["WORD"][24] + " lang:es -is:retweet").get_items()):
 
-            if (i > 20):
+            if (index > 20):
                 f.write("]")
 
                 # eval_res, tempfile = js2py.run_file("api.js")
@@ -131,6 +135,7 @@ def main():
                 f.seek(0, os.SEEK_SET)
                 f.truncate()
                 f.write("[")
+
 
             tweet_id = str(tweet.id)
 
@@ -152,7 +157,8 @@ def main():
                     'retweets': n_retweets, 'replies': n_replies, 'hashtags': l_hashtags}
 
             collection.insert_one(post)
-            text_analysis(post, nlp, nlp_s, freq_dict, f)
+            if (text_analysis(post, nlp, nlp_s, freq_dict, f)):
+                index+=1
             collection.delete_one({"_id": post['_id']})
 
     finally:

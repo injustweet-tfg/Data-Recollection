@@ -1,10 +1,11 @@
 import re
+import subprocess
+
 import tweepy
 import emoji
 import os
 import js2py
 import codecs
-import time
 
 #from bson import ObjectId
 from dotenv import load_dotenv , find_dotenv
@@ -73,21 +74,14 @@ class SimpleListener(tweepy.Stream):
             print("on_status")
 
 
-    def on_error(self, staus_code):
-        # code to run each time an error is received
-        if staus_code == 420:
-            return False
-        else:
-            return True
-
-
 def clean_text(text):
-    clean_text = re.sub(emoji.get_emoji_regexp(), " ", text)
-    clean_text = re.sub("(@.+)|(#.+)•", "", clean_text)
-    clean_text = re.sub(r"https\S+", "", clean_text)
-    clean_text = re.sub(r'[^\w]', ' ', clean_text)
-    clean_text = clean_text.lower()
-    return " ".join(clean_text.split())
+    c_t = re.sub(emoji.get_emoji_regexp(), " ", text)
+    c_t = re.sub("(@.+)|(#.+)•", "", c_t)
+    c_t = re.sub(r"https\S+", "", c_t)
+    c_t = re.sub(r'[^\w]', ' ', c_t)
+    c_t = c_t.lower()
+    return " ".join(c_t.split())
+
 
 def is_a_complain(text, freq_dict):
     value = 0
@@ -99,6 +93,9 @@ def is_a_complain(text, freq_dict):
             repeated_words.append(freq_dict["WORD"][i])
 
     return ((value / len(freq_dict)) >= 0.0534)
+    # ---------- PARA HACER PRUEBAS ----------
+    # return ((value / len(freq_dict)) > 0)
+
 
 def text_analysis(post, nlp, nlp_s, freq_dict,f):
     lemmatized = []
@@ -113,7 +110,6 @@ def text_analysis(post, nlp, nlp_s, freq_dict,f):
         stringed = stringed + n + " "
 
     doc = nlp_s(stringed)
-
 
     for sent in doc.sentences:
         for word in sent.words:
@@ -145,13 +141,13 @@ def main():
     freq_dict = pd.read_csv("../../dict/FREQUENCIES_DIC.csv")
     load_dotenv(find_dotenv("env/TwitterTokens.env"))
     tweepy_stream = SimpleListener(os.getenv('API_KEY'), os.getenv('API_KEY_SECRET'), os.getenv('ACCESS_TOKEN'), os.getenv('ACCESS_TOKEN_SECRET'), daemon=True)
-    tweepy_stream.filter(languages=['es'], threaded=True, track=[query["WORD"][0],query["WORD"][1],query["WORD"][2],query["WORD"][3],query["WORD"][4],query["WORD"][5],
+    tweepy_stream.filter(languages=['es'], threaded=True, track=[query["WORD"][0], query["WORD"][1], query["WORD"][2], query["WORD"][3], query["WORD"][4], query["WORD"][5],
                                                   query["WORD"][6],query["WORD"][7],query["WORD"][8],query["WORD"][9],query["WORD"][10],query["WORD"][11],
                                                   query["WORD"][12],query["WORD"][13],query["WORD"][14],query["WORD"][15],query["WORD"][16],query["WORD"][17],
                                                   query["WORD"][18],query["WORD"][19],query["WORD"][20],query["WORD"][21],query["WORD"][22],query["WORD"][23],
                                                   query["WORD"][24]])
 
-    f = codecs.open("../../json/examples_scrape.json", 'a+', encoding='utf-8', errors='ignore')
+    f = codecs.open("../../json/examples.json", 'a+', encoding='utf-8', errors='ignore')
     one_char = f.read(1)
 
     if not one_char:
@@ -168,22 +164,18 @@ def main():
     try:
         while (1):
             for post in collection.find():
-                if(index > 20):
+                if(index > 9):
                     f.write("]")
 
-                    #eval_res, tempfile = js2py.run_file("api.js")
-                    #tempfile.wish("GeeksforGeeks")
+                    subprocess.Popen(["node", "api1.js"])
 
                     f.seek(0, os.SEEK_SET)
                     f.truncate()
                     f.write("[")
 
-                if (text_analysis(post, nlp, nlp_s, freq_dict, f)):
+                if text_analysis(post, nlp, nlp_s, freq_dict, f):
                     index+=1
                 collection.delete_one({"_id": post['_id']})
-
-
-
 
     finally:
 
@@ -191,12 +183,13 @@ def main():
 
         f.write("]")
 
-        #Enviar a la api
+        # Enviar a la api
 
-        f.seek(0,os.SEEK_SET)
+        f.seek(0, os.SEEK_SET)
         f.truncate()
 
         f.close()
+
 
 def erase_lastjson(f):
     n_c = 0
@@ -205,15 +198,12 @@ def erase_lastjson(f):
     while (file_size - n_c) > 0:
         f.seek(file_size - n_c)
         aux = f.read(n_c)
-        if (aux == '}'):
+        if aux == '}':
             break
         n_c += 1
 
     f.seek(-n_c+1, os.SEEK_END)
     f.truncate()
-
-
-
 
 
 if __name__ == "__main__":

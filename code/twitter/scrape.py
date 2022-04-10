@@ -74,6 +74,21 @@ def text_analysis(post, nlp, nlp_s, freq_dict,f):
         aux_json += (aux_hashtags + "}, ")
         f.write(aux_json)
 
+def erase_lastjson(f):
+    n_c = 0
+    f.seek(0, os.SEEK_END)
+    file_size = f.tell()
+    while (file_size - n_c) > 0:
+        f.seek(file_size - n_c)
+        aux = f.read(n_c)
+        if (aux == '}'):
+            break
+        n_c += 1
+
+    f.seek(-n_c+1, os.SEEK_END)
+    f.truncate()
+
+
 
 
 
@@ -86,57 +101,70 @@ def main():
     db = client['tweet_stream']
     collection = db['test_scrape']
 
-    f = open("../../json/examples_scrape.json", 'a')
-    f.write("[")
-    client = MongoClient()
-    db = client['tweet_stream']
-    collection = db['test_scrape']
+    f = open("../../json/examples_scrape.json", 'a+')
+
+    one_char = f.read(1)
+
+    if not one_char:
+        f.write("[")
 
     nlp = spacy.load("es_core_news_sm")
     nlp_s = stanza.Pipeline(lang='es', processors='tokenize,mwt,pos,lemma')
 
 
     # Using TwitterSearchScraper to scrape data and append tweets to list
-    for i, tweet in enumerate(sntwitter.TwitterSearchScraper(query["WORD"][0] + " OR " + query["WORD"][0] + " OR " + query["WORD"][0] + " OR " + query["WORD"][3] + " OR " + query["WORD"][4] + " OR " +
-     query["WORD"][5] + " OR " + query["WORD"][6] + " OR " + query["WORD"][7] + " OR " + query["WORD"][8] + " OR " + query["WORD"][9] + " OR " +\
-     query["WORD"][10] + " OR " + query["WORD"][11] + " OR " + query["WORD"][12] + " OR " + query["WORD"][13] + " OR " + query["WORD"][14] + " OR " +\
-     query["WORD"][15] + " OR " + query["WORD"][16] + " OR " + query["WORD"][17] + " OR " + query["WORD"][18] + " OR " + query["WORD"][19] + " OR " +
-     query["WORD"][20] + " OR " + query["WORD"][21] + " OR " + query["WORD"][22] + " OR " + query["WORD"][23] + " OR " + query["WORD"][24] + " lang:es -is:retweet").get_items()):
-        tweet_id = str(tweet.id)
+    try:
+        for i, tweet in enumerate(sntwitter.TwitterSearchScraper(query["WORD"][0] + " OR " + query["WORD"][0] + " OR " + query["WORD"][0] + " OR " + query["WORD"][3] + " OR " + query["WORD"][4] + " OR " +
+         query["WORD"][5] + " OR " + query["WORD"][6] + " OR " + query["WORD"][7] + " OR " + query["WORD"][8] + " OR " + query["WORD"][9] + " OR " +\
+         query["WORD"][10] + " OR " + query["WORD"][11] + " OR " + query["WORD"][12] + " OR " + query["WORD"][13] + " OR " + query["WORD"][14] + " OR " +\
+         query["WORD"][15] + " OR " + query["WORD"][16] + " OR " + query["WORD"][17] + " OR " + query["WORD"][18] + " OR " + query["WORD"][19] + " OR " +
+         query["WORD"][20] + " OR " + query["WORD"][21] + " OR " + query["WORD"][22] + " OR " + query["WORD"][23] + " OR " + query["WORD"][24] + " lang:es -is:retweet").get_items()):
 
-        # if hasattr(status, "retweeted_status"):  # Check if Retweet
-        #    try:
-        #        text = status.retweeted_status.extended_tweet['full_text']
-        #        l_hashtags = status.retweeted_status.extended_tweet['entities']['hashtags']
-        #    except AttributeError:
-        #        text = status.retweeted_status.text
-        #         l_hashtags = status.retweeted_status.entities['hashtags']
-        # else:
+            if (i > 20):
+                f.write("]")
 
-        text = tweet.content
-        l_hashtags = tweet.hashtags
-        if l_hashtags is None:
-            l_hashtags = []
+                # eval_res, tempfile = js2py.run_file("api.js")
+                # tempfile.wish("GeeksforGeeks")
 
-        text.replace("\n", " ")
-        user = tweet.user.username
-        link = "https://twitter.com/" + user + "/status/" + tweet_id
+                f.seek(0, os.SEEK_SET)
+                f.truncate()
+                f.write("[")
 
-        date = tweet.date
-        n_likes = tweet.likeCount
-        n_retweets = tweet.retweetCount
-        n_replies = tweet.replyCount
+            tweet_id = str(tweet.id)
 
-        post = {'link': link, 'id': tweet_id, 'text': text, 'user': user, 'date': date, 'likes': n_likes,
-                'retweets': n_retweets, 'replies': n_replies, 'hashtags': l_hashtags}
+            text = tweet.content
+            l_hashtags = tweet.hashtags
+            if l_hashtags is None:
+                l_hashtags = []
 
-        collection.insert_one(post)
-        text_analysis(post, nlp, nlp_s, freq_dict, f)
-        collection.delete_one({"_id": post['_id']})
-        
-    f.seek(-2, os.SEEK_END)
-    f.truncate()
-    f.write("]")
+            text.replace("\n", " ")
+            user = tweet.user.username
+            link = "https://twitter.com/" + user + "/status/" + tweet_id
+
+            date = tweet.date
+            n_likes = tweet.likeCount
+            n_retweets = tweet.retweetCount
+            n_replies = tweet.replyCount
+
+            post = {'link': link, 'id': tweet_id, 'text': text, 'user': user, 'date': date, 'likes': n_likes,
+                    'retweets': n_retweets, 'replies': n_replies, 'hashtags': l_hashtags}
+
+            collection.insert_one(post)
+            text_analysis(post, nlp, nlp_s, freq_dict, f)
+            collection.delete_one({"_id": post['_id']})
+
+    finally:
+        erase_lastjson(f)
+
+        f.write("]")
+
+        # Enviar a la api
+
+        f.seek(0, os.SEEK_SET)
+        f.truncate()
+
+        f.close()
+
 
 
 

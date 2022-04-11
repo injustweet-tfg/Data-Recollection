@@ -1,5 +1,4 @@
 emoji==1.6.1
-Js2Py==0.71
 pandas==1.2.0
 pymongo==4.0.2
 python-dotenv==0.20.0

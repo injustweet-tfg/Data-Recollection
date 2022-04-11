@@ -4,24 +4,15 @@ import subprocess
 import tweepy
 import emoji
 import os
-import js2py
 import codecs
 
-#from bson import ObjectId
 from dotenv import load_dotenv , find_dotenv
 from pymongo import MongoClient
-import ssl
 import pandas as pd
 import spacy
 import stanza
 
 
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
 
 # ----------------------------------------------------     FIXED VALUES     --------------------------------------------------------------
 

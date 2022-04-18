@@ -3,7 +3,7 @@ import re
 import emoji
 import os
 import codecs
-
+import certifi
 from dotenv import load_dotenv , find_dotenv
 from pymongo import MongoClient
 import pandas as pd
@@ -89,9 +89,9 @@ def main():
     freq_dict = pd.read_csv("../../dict/FREQUENCIES_DIC.csv")
     load_dotenv(find_dotenv("env/TwitterTokens.env"))
 
-    client = MongoClient()
-    db = client['tweet_stream']
-    collection = db['test_scrape']
+    client = MongoClient("mongodb+srv://user:XSVUTDhgT68kNZp@cluster0.nf86w.mongodb.net/Twitter-dbs?retryWrites=true&w=majority", tlsCAFile=certifi.where())
+    db = client['collected_tweets']
+    collection = db['tweet_scrape']
 
     f = codecs.open("../../json/examples_scrape.json", 'a+', encoding='utf-8', errors='ignore')
 

@@ -5,7 +5,7 @@ import tweepy
 import emoji
 import os
 import codecs
-
+import certifi
 from dotenv import load_dotenv , find_dotenv
 from pymongo import MongoClient
 import pandas as pd
@@ -144,9 +144,9 @@ def main():
     if not one_char:
         f.write("[")
 
-    client = MongoClient()
-    db = client['tweet_stream']
-    collection = db['test']
+    client = MongoClient("mongodb+srv://user:XSVUTDhgT68kNZp@cluster0.nf86w.mongodb.net/Twitter-dbs?retryWrites=true&w=majority", tlsCAFile=certifi.where())
+    db = client['collected_tweets']
+    collection = db['tweet_stream']
 
     nlp = spacy.load("es_core_news_sm")
     nlp_s = stanza.Pipeline(lang='es', processors='tokenize,mwt,pos,lemma')

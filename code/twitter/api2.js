@@ -12,4 +12,4 @@ const options = {
         }
     }
 
-    await fetch('https://precariedapp.herokuapp.com/set', options).then(res => res.json()).then(res => console.log(res));
+    await fetch('https://precariedapp.herokuapp.com/set', options)

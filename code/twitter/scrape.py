@@ -122,7 +122,8 @@ def main():
                 # eval_res, tempfile = js2py.run_file("api1.js")
                 # tempfile.wish("GeeksforGeeks")
 
-                subprocess.Popen(["node", "api2.js"])
+                p = subprocess.Popen(["node", "api2.js"])
+                p.wait()
 
                 f.seek(0, os.SEEK_SET)
                 f.truncate()

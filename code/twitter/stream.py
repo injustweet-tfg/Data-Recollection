@@ -155,10 +155,11 @@ def main():
     try:
         while (1):
             for post in collection.find():
-                if(index > 9):
+                if(index >= 9): #...................................................................................................................................
                     f.write("]")
 
-                    subprocess.Popen(["node", "api1.js"])
+                    p = subprocess.Popen(["node", "api1.js"])
+                    p.wait()
 
                     f.seek(0, os.SEEK_SET)
                     f.truncate()

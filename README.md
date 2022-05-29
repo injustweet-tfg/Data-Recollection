@@ -8,7 +8,6 @@ Directorio con el código empleado
 - [api2.js](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/twitter/api2.js)      
 ### DICT
 Directorio con los diccionarios de todas las iteraciones
-- [FRECUENCIES.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/FRECUENCIES.csv)  
 - [FRECUENCIES_DIC.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/FRECUENCIES_DIC.csv) Diccionario de palabras para la clasificación de textos
 - [query_dic.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/query_dic.csv)  Diccionario con las palabras usadas en consultas (stream.py, scrape.py)
 ### JSON

@@ -122,8 +122,8 @@ def text_analysis(post, nlp, nlp_s, freq_dict,f):
 # processing whether it was a complaint or not. When we have 20 we close the file of JSONs and send it to the API. Then we start over again.
 def main():
 
-    query = pd.read_csv("../../../dict/query_dic.csv")
-    freq_dict = pd.read_csv("../../../dict/FREQUENCIES_DIC.csv")
+    query = pd.read_csv("../../dict/query_dic.csv")
+    freq_dict = pd.read_csv("../../dict/FREQUENCIES_DIC.csv")
     load_dotenv(find_dotenv("env/TwitterTokens.env"))
     tweepy_stream = SimpleListener(os.getenv('API_KEY'), os.getenv('API_KEY_SECRET'), os.getenv('ACCESS_TOKEN'), os.getenv('ACCESS_TOKEN_SECRET'), daemon=True)
     tweepy_stream.filter(languages=['es'], threaded=True, track=[query["WORD"][0], query["WORD"][1], query["WORD"][2], query["WORD"][3], query["WORD"][4], query["WORD"][5],
@@ -132,7 +132,7 @@ def main():
                                                   query["WORD"][18],query["WORD"][19],query["WORD"][20],query["WORD"][21],query["WORD"][22],query["WORD"][23],
                                                   query["WORD"][24]])
 
-    f = codecs.open("../../../json/examples.json", 'a+', encoding='utf-8', errors='ignore')
+    f = codecs.open("../../json/examples.json", 'a+', encoding='utf-8', errors='ignore')
     f.write("[")
 
     client = MongoClient("mongodb+srv://user:XSVUTDhgT68kNZp@cluster0.nf86w.mongodb.net/Twitter-dbs?retryWrites=true&w=majority", tlsCAFile=certifi.where())
@@ -152,7 +152,7 @@ def main():
                     f.close()
                     p = subprocess.Popen(["node", "api1.js"])
                     p.wait()
-                    f = codecs.open("../../../json/examples.json", 'a+', encoding='utf-8', errors='ignore')
+                    f = codecs.open("../../json/examples.json", 'a+', encoding='utf-8', errors='ignore')
                     f.seek(0, os.SEEK_SET)
                     f.truncate()
                     index = 0;

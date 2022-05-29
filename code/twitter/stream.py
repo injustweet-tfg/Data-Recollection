@@ -146,7 +146,7 @@ def main():
     try:
         while (1):
             for post in collection.find():
-                if(index > 19):
+                if(index > 80):
                     erase_lastjson(f)
                     f.write("]")
                     f.close()

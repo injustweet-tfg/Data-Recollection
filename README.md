@@ -2,10 +2,10 @@
 
 ### CODE/TWITTER
 Directorio con el código empleado
-- [stream.py](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/twitter/stream.py)   
-- [scrape.py](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/twitter/scrape.py)  
-- [api1.js](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/twitter/api1.js)  
-- [api2.js](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/twitter/api2.js)      
+- [stream.py](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/twitter/stream.py)  Código para la recolección de denuncias laborales en tiempo real a través de la API de Twitter
+- [scrape.py](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/twitter/scrape.py)  Código para la recolección de denuncias del histórico de Twitter a través de snscrape
+- [api1.js](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/twitter/api1.js)  Código para la subida de archivos desde el código stream.py
+- [api2.js](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/twitter/api2.js)   Código para la subida de archivos desde el código stream.py
 ### DICT
 Directorio con los diccionarios de todas las iteraciones
 - [FREQUENCIES_DIC.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/FREQUENCIES_DIC.csv) Diccionario de palabras para la clasificación de textos

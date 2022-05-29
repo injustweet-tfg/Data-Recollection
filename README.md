@@ -13,5 +13,5 @@ Directorio con los diccionarios de todas las iteraciones
 - [query_dic.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/query_dic.csv)  
 ### JSON
 Directorio con todos los archivos json utilizados
-- [examples.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/FRECUENCIES.csv)  
-- [examples_scrape.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/FRECUENCIES_DIC.csv) 
+- [examples.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/examples.json)  
+- [examples_scrape.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/examples_scrape.json) 

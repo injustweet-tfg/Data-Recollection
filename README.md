@@ -9,4 +9,14 @@ Directorio con el código empleado
     
 ### CORPUS
 Directorio con corpus
-- [IMDB_Dataset_SPANISH.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/code/corpus/IMDB_Dataset_SPANISH.csv)   
+- [IMDB_Dataset_SPANISH.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/corpus/IMDB_Dataset_SPANISH.csv)   
+
+### DICT
+Directorio con los diccionarios de todas las iteraciones
+- [FRECUENCIES.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/FRECUENCIES.csv)  
+- [FRECUENCIES_DIC.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/FRECUENCIES_DIC.csv)  
+- [query_dic.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/query_dic.csv)  
+### JSON
+Directorio con todos los archivos json utilizados
+- [examples.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/FRECUENCIES.csv)  
+- [examples_scrape.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/FRECUENCIES_DIC.csv) 

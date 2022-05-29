@@ -150,7 +150,7 @@ def main():
                     erase_lastjson(f)
                     f.write("]")
                     f.close()
-                    p = subprocess.Popen(["node", "CodigoAPICliente.js"])
+                    p = subprocess.Popen(["node", "api1.js"])
                     p.wait()
                     f = codecs.open("../../../json/examples.json", 'a+', encoding='utf-8', errors='ignore')
                     f.seek(0, os.SEEK_SET)

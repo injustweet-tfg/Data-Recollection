@@ -1,6 +1,6 @@
 import re
 import subprocess
-
+import time
 import tweepy
 import emoji
 import os
@@ -13,34 +13,20 @@ import spacy
 import stanza
 
 
-
-# ----------------------------------------------------     FIXED VALUES     --------------------------------------------------------------
-
-SCREENNAME = "JobsMierda"
-MOST_RECENT_ID = 0
-
-
 # set up a new class using tweepy.StreamListener
-
 class SimpleListener(tweepy.Stream):
-    client = MongoClient()
-    db = client['tweet_stream']
-    collection = db['test']
+    client = MongoClient("mongodb+srv://user:XSVUTDhgT68kNZp@cluster0.nf86w.mongodb.net/Twitter-dbs?retryWrites=true&w=majority", tlsCAFile=certifi.where())
+    db = client['collected_tweets']
+    collection = db['tweet_stream']
 
+    # Method that will be executed every time the listener gets a tweet matching with the query specified on main. Its main purpose is to connect with the database
+    # and insert all the interesting field from every tweet that calls this method.
     def on_status(self, status):
 
         tweet_id = status.id_str
 
 
-        #if hasattr(status, "retweeted_status"):  # Check if Retweet
-        #    try:
-        #        text = status.retweeted_status.extended_tweet['full_text']
-        #        l_hashtags = status.retweeted_status.extended_tweet['entities']['hashtags']
-        #    except AttributeError:
-        #        text = status.retweeted_status.text
-        #         l_hashtags = status.retweeted_status.entities['hashtags']
-        #else:
-        if not hasattr(status, "retweeted_status"):  # Check if not Retweet
+        if not hasattr(status, "retweeted_status"):  # Check if it is not a Retweet
             try:
                 text = status.extended_tweet["full_text"]
                 l_hashtags = status.extended_tweet['entities']['hashtags']
@@ -62,9 +48,9 @@ class SimpleListener(tweepy.Stream):
             'retweets': n_retweets, 'replies': n_replies, 'hashtags': l_hashtags}
 
             self.collection.insert_one(post)
-            print("on_status")
 
 
+# Method to clean the text for analyzing it. It strips it from emojis, symbols, links, hashtags and mentions, it also normalizes it.
 def clean_text(text):
     c_t = re.sub(emoji.get_emoji_regexp(), " ", text)
     c_t = re.sub("(@.+)|(#.+)•", "", c_t)
@@ -74,6 +60,14 @@ def clean_text(text):
     return " ".join(c_t.split())
 
 
+# Method that is used to format the text before sending it to IPFS
+def clean_text_final_format(text):
+    c_t = re.sub(r'\n', ' ', text)
+    c_t = re.sub(r'"', '\\"', c_t)
+
+    return " ".join(c_t.split())
+
+# Method that based on the algorithm determines whether a given text is a complain or not
 def is_a_complain(text, freq_dict):
     value = 0
     repeated_words = []
@@ -88,6 +82,8 @@ def is_a_complain(text, freq_dict):
     # return ((value / len(freq_dict)) > 0)
 
 
+# Method which given a tweet cleans its text and analyzes it, determines if it is a complaint and in that case writes a JSON version
+# of the tweet with most important fields
 def text_analysis(post, nlp, nlp_s, freq_dict,f):
     lemmatized = []
     stringed = ""
@@ -107,7 +103,7 @@ def text_analysis(post, nlp, nlp_s, freq_dict,f):
             lemmatized.append(word.lemma)
 
     if(is_a_complain(lemmatized, freq_dict)):
-        aux_json += "{\"link\":\"" + post['link'] + "\", \"id\":\"" + post['id'] + "\", \"text\":\"" + post["text"] + "\", \"user\":\"" + post['user'] + "\", \"date\":"\
+        aux_json += "{\"link\":\"" + post['link'] + "\", \"id\":\"" + post['id'] + "\", \"text\":\"" + clean_text_final_format(post["text"]) + "\", \"user\":\"" + post['user'] + "\", \"date\":"\
                    + str(int(post['date'].timestamp())) +", \"likes\":" + str(post['likes']) + ", \"retweets\":" + str(post['retweets']) + ", \"replies\":" + str(post['replies']) + ", \"hashtags\":"
         aux_hashtags = "["
         for h in post['hashtags']:
@@ -122,14 +118,12 @@ def text_analysis(post, nlp, nlp_s, freq_dict,f):
         return True
     return False
 
-
-
-
-
+# Here will be run the other thread which main purpose will be to delete every tweet from de database everytime it has finished
+# processing whether it was a complaint or not. When we have 20 we close the file of JSONs and send it to the API. Then we start over again.
 def main():
 
-    query = pd.read_csv("../../dict/query_dic.csv")
-    freq_dict = pd.read_csv("../../dict/FREQUENCIES_DIC.csv")
+    query = pd.read_csv("../../../dict/query_dic.csv")
+    freq_dict = pd.read_csv("../../../dict/FREQUENCIES_DIC.csv")
     load_dotenv(find_dotenv("env/TwitterTokens.env"))
     tweepy_stream = SimpleListener(os.getenv('API_KEY'), os.getenv('API_KEY_SECRET'), os.getenv('ACCESS_TOKEN'), os.getenv('ACCESS_TOKEN_SECRET'), daemon=True)
     tweepy_stream.filter(languages=['es'], threaded=True, track=[query["WORD"][0], query["WORD"][1], query["WORD"][2], query["WORD"][3], query["WORD"][4], query["WORD"][5],
@@ -138,11 +132,8 @@ def main():
                                                   query["WORD"][18],query["WORD"][19],query["WORD"][20],query["WORD"][21],query["WORD"][22],query["WORD"][23],
                                                   query["WORD"][24]])
 
-    f = codecs.open("../../json/examples.json", 'a+', encoding='utf-8', errors='ignore')
-    one_char = f.read(1)
-
-    if not one_char:
-        f.write("[")
+    f = codecs.open("../../../json/examples.json", 'a+', encoding='utf-8', errors='ignore')
+    f.write("[")
 
     client = MongoClient("mongodb+srv://user:XSVUTDhgT68kNZp@cluster0.nf86w.mongodb.net/Twitter-dbs?retryWrites=true&w=majority", tlsCAFile=certifi.where())
     db = client['collected_tweets']
@@ -155,14 +146,16 @@ def main():
     try:
         while (1):
             for post in collection.find():
-                if(index >= 9): #...................................................................................................................................
+                if(index > 19):
+                    erase_lastjson(f)
                     f.write("]")
-
-                    p = subprocess.Popen(["node", "api1.js"])
+                    f.close()
+                    p = subprocess.Popen(["node", "CodigoAPICliente.js"])
                     p.wait()
-
+                    f = codecs.open("../../../json/examples.json", 'a+', encoding='utf-8', errors='ignore')
                     f.seek(0, os.SEEK_SET)
                     f.truncate()
+                    index = 0;
                     f.write("[")
 
                 if text_analysis(post, nlp, nlp_s, freq_dict, f):
@@ -174,25 +167,21 @@ def main():
         erase_lastjson(f)
 
         f.write("]")
-
-        # Enviar a la api
-        subprocess.Popen(["node", "api1.js"])
-
-        f.seek(0, os.SEEK_SET)
-        f.truncate()
-
         f.close()
 
-
+# Method used to delete the last JSON that has been written. This is used, because since the file is send to the API, we cannot risk
+# to send something that is not in its final format. That means an incomplete JSON which was being written or if the
+# execution abruptly stops, not letting something incomplete sit there. It will also delete the last comma that is always written.
 def erase_lastjson(f):
     n_c = 0
     f.seek(0, os.SEEK_END)
     file_size = f.tell()
     while (file_size - n_c) > 0:
         f.seek(file_size - n_c)
-        aux = f.read(n_c)
-        if aux == '}':
-            break
+        aux = f.read(file_size - n_c)
+        if aux != '':
+                if aux[0] == '}':
+                        break
         n_c += 1
 
     f.seek(-n_c+1, os.SEEK_END)

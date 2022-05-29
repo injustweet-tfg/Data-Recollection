@@ -152,7 +152,7 @@ def thread_function():
         collection.insert_one(post)
 
 # Here will be run the other thread which main purpose will be to delete every tweet from de database everytime it has finished
-# processing whether it was a complaint or not. When we have 80 (number which we have determined are what can be found in a day)
+# processing whether it was a complaint or not. When we have 80 (number which we have determined are what can be found in 2 days)
 # we close the file of JSONs and send it to the API. Then we start over again.
 def main():
     new_thread1 = Thread(target=thread_function)

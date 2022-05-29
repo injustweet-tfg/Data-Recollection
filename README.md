@@ -9,9 +9,9 @@ Directorio con el código empleado
 ### DICT
 Directorio con los diccionarios de todas las iteraciones
 - [FRECUENCIES.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/FRECUENCIES.csv)  
-- [FRECUENCIES_DIC.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/FRECUENCIES_DIC.csv)  
-- [query_dic.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/query_dic.csv)  
+- [FRECUENCIES_DIC.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/FRECUENCIES_DIC.csv) Diccionario de palabras para la clasificación de textos
+- [query_dic.csv](https://github.com/injustweet-tfg/Data-Recollection/blob/master/dict/query_dic.csv)  Diccionario con las palabras usadas en consultas (stream.py, scrape.py)
 ### JSON
 Directorio con todos los archivos json utilizados
-- [examples.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/examples.json)  
-- [examples_scrape.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/examples_scrape.json) 
+- [examples.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/examples.json) Archivo JSON con los tweets recogidos por el programa stream.py en tiempo de ejecución
+- [examples_scrape.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/examples_scrape.json) Archivo JSON con los tweets recogidos por el programa scrape.py en tiempo de ejecución

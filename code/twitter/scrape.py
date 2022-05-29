@@ -183,7 +183,7 @@ def main():
         while new_thread1.is_alive():
             for post in collection.find():
 
-                if index > 0:
+                if index > 79:
                     erase_lastjson(f)
                     f.write("]")
                     f.close()

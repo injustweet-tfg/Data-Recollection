@@ -165,7 +165,7 @@ def main():
         "mongodb+srv://user:XSVUTDhgT68kNZp@cluster0.nf86w.mongodb.net/Twitter-dbs?retryWrites=true&w=majority",
         tlsCAFile=certifi.where())
     db = client['collected_tweets']
-    collection = db['tweet_scrape_aux']
+    collection = db['tweet_scrape']
 
     f = codecs.open("../../json/examples_scrape.json", 'a+', encoding='utf-8', errors='ignore')
 

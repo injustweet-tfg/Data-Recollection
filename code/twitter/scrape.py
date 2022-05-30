@@ -79,7 +79,7 @@ def text_analysis(post, nlp, nlp_s, freq_dict, f):
             aux_hashtags = aux_hashtags[:-2]
         aux_hashtags += "]"
 
-        aux_json += (aux_hashtags + "}, ")
+        aux_json += (aux_hashtags + "}, \n")
         f.write(aux_json)
         return True
     return False

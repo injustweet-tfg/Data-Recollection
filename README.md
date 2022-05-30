@@ -17,4 +17,4 @@ Directory with useful iterations of the dictionary.
 ### JSON
 Directory that holds every JSON file used.
 - [examples.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/examples.json) File that keeps every tweet retrieved by stream.py on runtime. 
-- [examples_scrape.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/examples_scrape.json)File that keeps every tweet retrieved by scrape.py on runtime. 
+- [examples_scrape.json](https://github.com/injustweet-tfg/Data-Recollection/blob/master/json/examples_scrape.json) File that keeps every tweet retrieved by scrape.py on runtime. 

@@ -113,7 +113,7 @@ def thread_function():
         "mongodb+srv://user:XSVUTDhgT68kNZp@cluster0.nf86w.mongodb.net/Twitter-dbs?retryWrites=true&w=majority",
         tlsCAFile=certifi.where())
     db = client['collected_tweets']
-    collection = db['tweet_scrape_aux']
+    collection = db['tweet_scrape']
     load_dotenv(find_dotenv("env/TwitterTokens.env"))
 
     query = pd.read_csv("../../dict/query_dic.csv")
